@@ -30,7 +30,7 @@ namespace EspacioPersonaje
         private int fuerza;
         private int nivel;
         private int armadura;
-        private int salud;
+        private float salud;
 
         //Propiedades(caracteristicas)
         public int Velocidad { get => velocidad; set => velocidad = value; }
@@ -38,7 +38,7 @@ namespace EspacioPersonaje
         public int Fuerza { get => fuerza; set => fuerza = value; }
         public int Nivel { get => nivel; set => nivel = value; }
         public int Armadura { get => armadura; set => armadura = value; }
-        public int Salud { get => salud; set => salud = value; }
+        public float Salud { get => salud; set => salud = value; }
 
         //metodos
         public void mostrarPersonaje()
@@ -59,7 +59,7 @@ namespace EspacioPersonaje
 
     public class FabricaDePersonajes //clase que genera personajes aleatorios
     {
-        string[] nombres = { "Thaus", "Racid", "Hyr", "Red", "Flint", "Cecile" };
+        string[] nombres = { "Thaus", "Racid", "Hyr", "Red", "Flint", "Cecile","Gadull","Pix","Marcus","Geoff"};
         string[] apodos = { "Ace", "Shadow", "Raptor", "Luna", "Blaze", "Spike" };
         public Personaje generarPersonaje() //metodo que retorna el personaje con los datos cargados
         {
