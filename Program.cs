@@ -216,29 +216,23 @@ static void realizarMejora(Personaje ganador)
 
         case 2:
             mejora = rm.Next(1,6);
-            System.Console.WriteLine($"Mejora de velocidad de {mejora}");
-            ganador.Destreza += mejora;
-            break;
-
-        case 3:
-            mejora = rm.Next(1,6);
             System.Console.WriteLine($"Mejora de Fuerza de {mejora}");
             ganador.Fuerza += mejora;
             break;
 
-        case 4:
-            mejora = 1;
+        case 3:
+            mejora = 1; //solo subo un nivel
             System.Console.WriteLine($"Mejora de Nivel de {mejora}");
             ganador.Nivel += mejora;
             break;
 
-        case 5:
+        case 4:
             mejora = rm.Next(1,6);
             System.Console.WriteLine($"Mejora de Armadura de {mejora}");
             ganador.Armadura += mejora;
             break;
 
-        case 6:
+        case 5:
             mejora = rm.Next(1,21);
             System.Console.WriteLine($"Mejora de Salud de {mejora}");
             ganador.Salud += mejora;
