@@ -1,25 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json;
 
 
 namespace EspacioPersonaje
 {
-    public enum Tipo{humano,deidad,hada,ogro,nigromante,mago};
-    
+
     public class Personaje  //clase que contiene los datos y caracteristicas del personaje
     {
         //datos
-        private Tipo tipo;
-        private string? nombre;
-        private string? apodo;
+        private string tipo;
+        private string nombre;
         private DateTime fechaNac;
         private int edad;
 
         //Propiedades (datos)
-        public Tipo Tipo { get => tipo; set => tipo = value; }
+        public string Tipo { get => tipo; set => tipo = value; }
         public string Nombre { get => nombre; set => nombre = value; }
-        public string Apodo { get => apodo; set => apodo = value; }
         public DateTime FechaNac { get => fechaNac; set => fechaNac = value; }
         public int Edad { get => edad; set => edad = value; }
 
@@ -43,42 +38,52 @@ namespace EspacioPersonaje
         //metodos
         public void mostrarPersonaje()
         {
-            Console.WriteLine($"Nombre: {Nombre}");
-            Console.WriteLine($"Apodo: {Apodo}");
-            Console.WriteLine($"Tipo: {Tipo}");
-            Console.WriteLine($"Fecha de nacimiento: {FechaNac.ToShortDateString()}");
-            Console.WriteLine($"Edad: {Edad}");
-            Console.WriteLine($"Velocidad: {Velocidad}");
-            Console.WriteLine($"Destreza: {Destreza}");
-            Console.WriteLine($"Fuerza: {Fuerza}");
-            Console.WriteLine($"Nivel: {Nivel}");
-            Console.WriteLine($"Armadura: {Armadura}");
-            Console.WriteLine($"Salud: {Salud}");
+            System.Console.WriteLine("DATOS");
+            Console.WriteLine($"⋄ Nombre: {Nombre}");
+            Console.WriteLine($"⋄ Tipo: {Tipo}");
+            Console.WriteLine($"⋄ Fecha de nacimiento: {FechaNac.ToShortDateString()}");
+            Console.WriteLine($"⋄ Edad: {Edad}\n");
+            System.Console.WriteLine("ESTADISTICAS");
+            Console.WriteLine($"⋄ Velocidad: {Velocidad}");
+            Console.WriteLine($"⋄ Destreza: {Destreza}");
+            Console.WriteLine($"⋄ Fuerza: {Fuerza}");
+            Console.WriteLine($"⋄ Nivel: {Nivel}");
+            Console.WriteLine($"⋄ Armadura: {Armadura}");
+            Console.WriteLine($"⋄ Salud: {Salud}");
         }
     }
 
     public class FabricaDePersonajes //clase que genera personajes aleatorios
     {
-        string[] nombres = { "Thaus", "Racid", "Hyr", "Red", "Flint", "Cecile","Gadull","Pix","Marcus","Geoff"};
-        string[] apodos = { "Ace", "Shadow", "Raptor", "Luna", "Blaze", "Spike" };
+        private List<string> nombresUtilizados = new List<string>();
+        string[] nombres = { "Thaus", "Racid", "Hyr", "Red", "Flint", "Cecile","Gadull","Pix","Marcus","Geoff","Ace", "Shadow", "Raptor", "Luna", "Blaze", "Spike" };
+
+        string[] tipos = {"humano","deidad","hada","ogro","nigromante","mago","elfo","orco","gnomo","vampiro","enano","dragon","goblin"};
         public Personaje generarPersonaje() //metodo que retorna el personaje con los datos cargados
         {
             Personaje personaje = new Personaje(); //instancio el personaje
             Random aleatorio = new Random();
 
             //generar datos
-            personaje.Tipo = (Tipo)aleatorio.Next(0,Enum.GetValues(typeof(Tipo)).Length); //devuelve un array con los enum y obtengo su longitud
-            personaje.Nombre = nombres[aleatorio.Next(nombres.Length)];
-            personaje.Apodo = apodos[aleatorio.Next(apodos.Length)];
+            personaje.Tipo = tipos[aleatorio.Next(tipos.Length)]; 
+
+            string nombreGenerado;
+            do
+            {
+                nombreGenerado = nombres[aleatorio.Next(nombres.Length)];
+            } while (nombresUtilizados.Contains(nombreGenerado));
+            personaje.Nombre = nombreGenerado;
+            nombresUtilizados.Add(nombreGenerado);
+
             personaje.Edad = aleatorio.Next(0,300); //genero aleatoriamente la edad
-            personaje.FechaNac = DateTime.Now.AddYears(-personaje.Edad); //de la fecha actual resto la edad para pbtener la fecha de nacimiento
+            personaje.FechaNac = DateTime.Now.AddYears(-personaje.Edad); //de la fecha actual resto la edad para obtener la fecha de nacimiento
 
             //generar caracterisitcas
-            personaje.Velocidad = aleatorio.Next(1,11);//indInferior,indSuperior + 1
-            personaje.Destreza = aleatorio.Next(1,6);
-            personaje.Fuerza = aleatorio.Next(1,11);
-            personaje.Nivel = aleatorio.Next(1,11);
-            personaje.Armadura = aleatorio.Next(1,11);
+            personaje.Velocidad = aleatorio.Next(3,11);//indInferior,indSuperior + 1
+            personaje.Destreza = aleatorio.Next(3,6);
+            personaje.Fuerza = aleatorio.Next(3,11);
+            personaje.Nivel = aleatorio.Next(3,11);
+            personaje.Armadura = aleatorio.Next(3,11);
             personaje.Salud = 100;
 
             return personaje;
@@ -87,20 +92,21 @@ namespace EspacioPersonaje
 
     public class PersonajesJson
     {
+
+        
         //guarda(lista,nombreArichivo)
         public  void GuardarPersonajes(List<Personaje> listaDePersonajes,string nombreArchivo)
         {
             //SERIALIZA PARA GUARDARLO EN UN ARCHIVO JSON
 
             string Personajesjson = JsonSerializer.Serialize(listaDePersonajes); //mando objeto y lo convierte a string con un formato json
-            File.WriteAllText(nombreArchivo,Personajesjson); //escribe y pisa lo anterior?
+            File.WriteAllText(nombreArchivo,Personajesjson); 
         }
 
         //leer 
         public List<Personaje> LeerPersonajes(string nombreArchivo)
         {
             //DESERIALIZA  un archivo JSON a un objeto
-            //es importante q el nombre de las propiedades de la clase tienen q ser iguales a las etiquetas de json
             if (File.Exists(nombreArchivo))
             {
                 string jsonString = File.ReadAllText(nombreArchivo); //lee el json y lo guardo en un string
